@@ -1,4 +1,4 @@
-# 📹 Sistema de Vigilância Globo
+# 📹 Sistema de Transmissão Globo
 
 Sistema completo de monitoramento de câmeras com streaming em tempo real e reconhecimento de voz. Desenvolvido com Next.js 14, TypeScript e PostgreSQL.
 
