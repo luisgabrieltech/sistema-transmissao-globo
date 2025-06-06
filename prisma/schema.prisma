@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      Role     @default(OPERATOR)
+  status    Status   @default(ACTIVE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Camera {
+  id        String   @id @default(cuid())
+  name      String
+  location  String
+  rtspUrl   String
+  hlsUrl    String?
+  keywords  String[]
+  status    CameraStatus @default(OFFLINE)
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("cameras")
+}
+
+model SystemConfig {
+  id                String @id @default(cuid())
+  speechApiKey      String?
+  mediaMtxUrl       String @default("http://localhost:8888")
+  voiceThreshold    Int    @default(85)
+  autoSwitchEnabled Boolean @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("system_config")
+}
+
+model Backup {
+  id        String     @id @default(cuid())
+  name      String
+  type      BackupType
+  filePath  String?
+  size      Int        @default(0)
+  status    BackupStatus @default(IN_PROGRESS)
+  data      Json?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("backups")
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum CameraStatus {
+  ONLINE
+  OFFLINE
+  ERROR
+}
+
+enum BackupType {
+  FULL
+  CAMERAS
+  USERS
+  SETTINGS
+}
+
+enum BackupStatus {
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
